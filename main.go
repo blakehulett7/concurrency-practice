@@ -3,5 +3,11 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Dominus Iesus Christus")
+	go PrintThis("In Nomine Patris...")
+	PrintThis("Et Filii...")
+	PrintThis("Et Spiritus Sancti!")
+}
+
+func PrintThis(s string) {
+	fmt.Println(s)
 }
