@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
 	hail_mary := []string{
@@ -15,7 +18,7 @@ func main() {
 	}
 
 	for i, phrase := range hail_mary {
-		go PrintThis(fmt.Sprintf("%d. %s\n", i, phrase))
+		go PrintThis(fmt.Sprintf("%d. %s", i, phrase))
 	}
 
 	PrintThis("In Nomine Patris...")
