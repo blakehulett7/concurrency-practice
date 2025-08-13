@@ -11,7 +11,7 @@ func main() {
 		"benedicta tu in mulieribus",
 		"et benedictus fructus ventris tui, Iesus.",
 		"Sacta Maria mater dei,",
-		"ora pro nobis preccatoribus",
+		"ora pro nobis peccatoribus",
 		"nunc et in hora a mortis nostrae",
 		"Amen",
 	}
