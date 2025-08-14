@@ -21,9 +21,12 @@ var Philosophers = []Philosopher{
 }
 
 var Hunger = 3
-var EatTime = time.Second
-var ThinkTime = 3 * time.Second
-var SleepTime = time.Second
+var EatTime = 0 * time.Second
+var ThinkTime = 0 * time.Second
+var SleepTime = 0 * time.Second
+
+var Done = []Philosopher{}
+var DoneLock = &sync.Mutex{}
 
 func main() {
 	fmt.Println("Dominus Iesus Christus")
@@ -47,6 +50,7 @@ func main() {
 	}
 	eating.Wait()
 
+	fmt.Println(Done)
 	fmt.Println("The table is empty")
 
 }
@@ -92,4 +96,8 @@ func Dine(philosopher Philosopher, eating, seated *sync.WaitGroup, forks map[int
 
 	fmt.Printf("%s is satisfied.\n", philosopher.Name)
 	fmt.Printf("%s left the table.\n", philosopher.Name)
+
+	DoneLock.Lock()
+	Done = append(Done, philosopher)
+	DoneLock.Unlock()
 }
