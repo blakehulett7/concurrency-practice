@@ -19,8 +19,8 @@ type PizzaOrder struct {
 }
 
 func main() {
-	ColorPrint("Dominus Iesus Christus", Cyan)
-	ColorPrint("----------------------", Cyan)
+	ColorPrint(Cyan, "Dominus Iesus Christus")
+	ColorPrint(Cyan, "----------------------")
 
 	pizza_job := &Producer{
 		data: make(chan PizzaOrder),
@@ -28,6 +28,16 @@ func main() {
 	}
 
 	go Pizzeria(pizza_job)
+
+	/*
+		for i := range pizza_job.data {
+			if i.Number <= NumberOfPizzas {
+				if i.IsSuccessful {
+					ColorPrint(i.Message, Green)
+				}
+			}
+		}
+	*/
 }
 
 func MakePizza(pizza_number int) *PizzaOrder {
@@ -78,16 +88,18 @@ func Pizzeria(pizza_maker *Producer) {
 
 	for {
 		current_pizza := MakePizza(i)
-		if current_pizza != nil {
-			i = current_pizza.Number
-			select {
-			case pizza_maker.data <- *current_pizza:
+		if current_pizza == nil {
+			return
+		}
 
-			case quit_chan := <-pizza_maker.quit:
-				close(pizza_maker.data)
-				close(quit_chan)
-				return
-			}
+		i = current_pizza.Number
+		select {
+		case pizza_maker.data <- *current_pizza:
+
+		case quit_chan := <-pizza_maker.quit:
+			close(pizza_maker.data)
+			close(quit_chan)
+			return
 		}
 	}
 }

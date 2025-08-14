@@ -3,8 +3,11 @@ package main
 import "fmt"
 
 const ResetColor = "\033[0m"
-const Cyan = "\033[36m"
 
-func ColorPrint(message, color string) {
+const BrightGreen = "\033[92m"
+const Cyan = "\033[36m"
+const Green = "\033[32m"
+
+func ColorPrint(color, message string) {
 	fmt.Printf("%s%s%s\n", color, message, ResetColor)
 }
