@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 const NumberOfPizzas = 10
 
 var PizzasMade int
@@ -14,13 +12,20 @@ type PizzaOrder struct {
 	IsSuccessful bool
 }
 
-type Producer struct {
-	data chan PizzaOrder
-	quit chan chan error
+func main() {
+	ColorPrint("Dominus Iesus Christus", Cyan)
+	ColorPrint("----------------------", Cyan)
+
+	pizza_job := &Producer{
+		data: make(chan PizzaOrder),
+		quit: make(chan chan error),
+	}
+
+	go Pizzeria(pizza_job)
 }
 
-func main() {
-	seed := ""
+func Pizzeria(pizza_maker *Producer) {
+	for {
 
-	fmt.Println("Dominus Iesus Christus")
+	}
 }
