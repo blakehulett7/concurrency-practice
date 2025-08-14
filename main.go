@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
 
 func main() {
+	var wg sync.WaitGroup
 	hail_mary := []string{
 		"Ave Maria, gratia plena",
 		"Dominus tecum",
@@ -17,14 +19,18 @@ func main() {
 	}
 
 	for i, phrase := range hail_mary {
-		go PrintThis(fmt.Sprintf("%d. %s", i, phrase))
+		wg.Add(1)
+		go PrintThis(fmt.Sprintf("%d. %s", i, phrase), &wg)
 	}
+	wg.Wait()
 
-	PrintThis("In Nomine Patris...")
-	PrintThis("Et Filii...")
-	PrintThis("Et Spiritus Sancti!")
+	wg.Add(3)
+	PrintThis("In Nomine Patris...", &wg)
+	PrintThis("Et Filii...", &wg)
+	PrintThis("Et Spiritus Sancti!", &wg)
 }
 
-func PrintThis(s string) {
+func PrintThis(s string, wg *sync.WaitGroup) {
+	defer wg.Done()
 	fmt.Println(s)
 }
