@@ -49,6 +49,9 @@ func main() {
 			ColorPrint(Red, fmt.Sprintf("*** Error closing channel! %v", err))
 		}
 	}
+
+	ColorPrint(Cyan, "------------------")
+	ColorPrint(Cyan, "Et Spiritus Sancti")
 }
 
 func MakePizza(pizza_number int) *PizzaOrder {
