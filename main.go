@@ -5,8 +5,20 @@ import (
 	"sync"
 )
 
+var s string
+var wg sync.WaitGroup
+
 func main() {
-	var wg sync.WaitGroup
+	s = "Dominus Iesus Christus"
+
+	wg.Add(3)
+	go UpdateThis("Gloria Patris")
+	go UpdateThis("Et Filii")
+	go UpdateThis("Et Spiritus Sancti")
+	wg.Wait()
+
+	fmt.Println(s)
+
 	hail_mary := []string{
 		"Ave Maria, gratia plena",
 		"Dominus tecum",
@@ -33,4 +45,9 @@ func main() {
 func PrintThis(s string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println(s)
+}
+
+func UpdateThis(new_s string) {
+	defer wg.Done()
+	s = new_s
 }
