@@ -11,10 +11,12 @@ var wg sync.WaitGroup
 func main() {
 	s = "Dominus Iesus Christus"
 
+	var m sync.Mutex
+
 	wg.Add(3)
-	go UpdateThis("Gloria Patris")
-	go UpdateThis("Et Filii")
-	go UpdateThis("Et Spiritus Sancti")
+	go UpdateThis("Gloria Patris", &m)
+	go UpdateThis("Et Filii", &m)
+	go UpdateThis("Et Spiritus Sancti", &m)
 	wg.Wait()
 
 	fmt.Println(s)
@@ -47,7 +49,10 @@ func PrintThis(s string, wg *sync.WaitGroup) {
 	fmt.Println(s)
 }
 
-func UpdateThis(new_s string) {
+func UpdateThis(new_s string, m *sync.Mutex) {
 	defer wg.Done()
+
+	m.Lock()
+	defer m.Unlock()
 	s = new_s
 }
