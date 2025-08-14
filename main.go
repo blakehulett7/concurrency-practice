@@ -8,7 +8,47 @@ import (
 var s string
 var wg sync.WaitGroup
 
+type Income struct {
+	Source string
+	Amount int
+}
+
 func main() {
+	balance := 0
+	var m sync.Mutex
+
+	fmt.Printf("Initial balance: %d\n", balance)
+	fmt.Println()
+
+	incomes := []Income{
+		{Source: "main", Amount: 500},
+		{Source: "gifts", Amount: 10},
+		{Source: "side", Amount: 50},
+		{Source: "flow", Amount: 100},
+	}
+
+	for i, income := range incomes {
+		wg.Add(1)
+		go func(i int, income Income) {
+			defer wg.Done()
+			for week := 1; week <= 52; week++ {
+				m.Lock()
+				current := balance
+				current += income.Amount
+				balance = current
+				m.Unlock()
+
+				fmt.Printf("On week %d, we got %d from %s\n", week, income.Amount, income.Source)
+			}
+		}(i, income)
+	}
+	wg.Wait()
+
+	fmt.Printf("Final balance: %d\n", balance)
+	fmt.Println()
+}
+
+func OldMain() {
 	s = "Dominus Iesus Christus"
 
 	var m sync.Mutex
