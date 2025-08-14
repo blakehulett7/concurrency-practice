@@ -29,15 +29,26 @@ func main() {
 
 	go Pizzeria(pizza_job)
 
-	/*
-		for i := range pizza_job.data {
-			if i.Number <= NumberOfPizzas {
-				if i.IsSuccessful {
-					ColorPrint(i.Message, Green)
-				}
+	for i := range pizza_job.data {
+		if i.Number <= NumberOfPizzas {
+			if i.IsSuccessful {
+				ColorPrint(Green, i.Message)
+				ColorPrint(Green, fmt.Sprintf("Order no %d is out for delivery", i.Number))
+				continue
 			}
+
+			ColorPrint(Red, i.Message)
+			ColorPrint(Red, "Customer is really mad")
+			continue
+
 		}
-	*/
+
+		ColorPrint(Cyan, "Done making pizzas...")
+		err := pizza_job.Close()
+		if err != nil {
+			ColorPrint(Red, fmt.Sprintf("*** Error closing channel! %v", err))
+		}
+	}
 }
 
 func MakePizza(pizza_number int) *PizzaOrder {
