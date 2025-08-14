@@ -6,8 +6,9 @@ import (
 )
 
 var msg string
+var wg sync.WaitGroup
 
-func updateMessage(s string, wg *sync.WaitGroup) {
+func updateMessage(s string) {
 	defer wg.Done()
 	msg = s
 }
@@ -23,24 +24,23 @@ func main() {
 	// the program runs properly, and prints out three different messages.
 	// Then, write a test for all three functions in this program: updateMessage(),
 	// printMessage(), and main().
-	var wg sync.WaitGroup
 
 	msg = "Hello, world!"
 
 	wg.Add(1)
-	go updateMessage("Hello, universe!", &wg)
+	go updateMessage("Hello, universe!")
 	wg.Wait()
 
 	printMessage()
 
 	wg.Add(1)
-	go updateMessage("Hello, cosmos!", &wg)
+	go updateMessage("Hello, cosmos!")
 	wg.Wait()
 
 	printMessage()
 
 	wg.Add(1)
-	go updateMessage("Hello, world!", &wg)
+	go updateMessage("Hello, world!")
 	wg.Wait()
 
 	printMessage()
