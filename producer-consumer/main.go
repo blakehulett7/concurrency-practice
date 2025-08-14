@@ -50,6 +50,7 @@ func main() {
 		}
 	}
 
+	ColorPrint(Cyan, fmt.Sprintf("We made %d pizzas, failed %d pizzas for a total of %d pizzas.", PizzasMade, PizzasFailed, TotalPizzas))
 	ColorPrint(Cyan, "------------------")
 	ColorPrint(Cyan, "Et Spiritus Sancti")
 }
