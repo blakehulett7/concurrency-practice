@@ -44,6 +44,7 @@ func main() {
 		}
 
 		ColorPrint(Cyan, "Done making pizzas...")
+
 		err := pizza_job.Close()
 		if err != nil {
 			ColorPrint(Red, fmt.Sprintf("*** Error closing channel! %v", err))
