@@ -29,7 +29,7 @@ func (shop *BarberShop) AddBarber(name string) {
 
 			client, shop_open := <-shop.ClientsChannel
 			if !shop_open {
-				shop.Barbers--
+				shop.BarbersDoneChannel <- true
 				ColorPrint(Red, fmt.Sprintf("Barber %s has gone home", name))
 				return
 			}
@@ -44,4 +44,21 @@ func (shop *BarberShop) AddBarber(name string) {
 			ColorPrint(Green, fmt.Sprintf("Barber %s has finished %s's hair cut", name, client))
 		}
 	}()
+}
+
+func (shop *BarberShop) CloseShop() {
+	ColorPrint(Green, "Closing shop...")
+
+	close(shop.ClientsChannel)
+	shop.IsOpen = false
+
+	for barber_counter := 0; barber_counter < shop.Barbers; barber_counter++ {
+		<-shop.BarbersDoneChannel
+	}
+
+	close(shop.BarbersDoneChannel)
+
+	fmt.Println()
+	ColorPrint(Cyan, "-------------------------")
+	ColorPrint(Cyan, "Barber shop is now closed")
 }

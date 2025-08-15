@@ -1,6 +1,10 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 const waiting_room_size = 10
 const arrival_rate = 100
@@ -10,6 +14,7 @@ const time_open = 10 * time.Second
 func main() {
 	ColorPrint(Cyan, "Dominus Iesus Christus")
 	ColorPrint(Cyan, "----------------------")
+	fmt.Println()
 
 	client_channel := make(chan string, waiting_room_size)
 	done_channel := make(chan bool)
@@ -24,8 +29,24 @@ func main() {
 	}
 
 	ColorPrint(Green, "Shop is open...")
-
 	shop.AddBarber("Dave")
+
+	shop_is_closing_channel := make(chan bool)
+	shop_is_closed := make(chan bool)
+
+	go func() {
+		<-time.After(time_open)
+		shop_is_closing_channel <- true
+		shop.CloseShop()
+		shop_is_closed <- true
+	}()
+
+	go func() {
+		for {
+			//dice_roll := rand.Int() % (2 * arrival_rate)
+			select {}
+		}
+	}()
 
 	time.Sleep(5 * time.Second)
 }
