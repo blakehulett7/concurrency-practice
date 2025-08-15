@@ -8,29 +8,26 @@ const cut_duration = 1000 * time.Millisecond
 const time_open = 10 * time.Second
 
 func main() {
-    ColorPrint(Cyan, "Dominus Iesus Christus")
-    ColorPrint(Cyan, "----------------------")
+	ColorPrint(Cyan, "Dominus Iesus Christus")
+	ColorPrint(Cyan, "----------------------")
 
-    client_channel := make(chan string, waiting_room_size)
-    done_channel := make(chan bool)
+	client_channel := make(chan string, waiting_room_size)
+	done_channel := make(chan bool)
 
-    shop := BarberShop{
-        ShopCapacity: waiting_room_size,
-        CutDuration: cut_duration,
-        Barbers: 0,
-        ClientsChannel: client_channel,
-        BarbersDoneChannel: done_channel,
-        IsOpen: true,
-    }
-
-    ColorPrint(Green, "Shop is open...")
-
-	waiting_customers := []Customer{}
-	barber := Barber{IsAsleep: false}
-
-	if len(waiting_customers) == 0 {
-		barber.Sleep()
+	shop := BarberShop{
+		ShopCapacity:       waiting_room_size,
+		CutDuration:        cut_duration,
+		Barbers:            0,
+		ClientsChannel:     client_channel,
+		BarbersDoneChannel: done_channel,
+		IsOpen:             true,
 	}
+
+	ColorPrint(Green, "Shop is open...")
+
+	shop.AddBarber("Dave")
+
+	time.Sleep(5 * time.Second)
 }
 
 type Barber struct {
@@ -43,11 +40,9 @@ func (b *Barber) Sleep() {
 
 func CustomerArrivesSystem(barber_is_asleep chan bool) {
 	for {
-        is_asleep := <- barber_is_asleep
-        if is_asleep {
+		is_asleep := <-barber_is_asleep
+		if is_asleep {
 
-        }
-
-        if len()
+		}
 	}
 }
