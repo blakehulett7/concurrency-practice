@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"sync"
 
 	"gorm.io/driver/postgres"
@@ -25,4 +26,13 @@ func main() {
 		WaitGroup: &wg,
 	}
 
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/", app.Home)
+
+	server := &http.Server{
+		Addr:    ":1000",
+		Handler: RecoveryMiddleware(mux),
+	}
+	server.ListenAndServe()
 }
