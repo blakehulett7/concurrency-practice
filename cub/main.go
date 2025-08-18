@@ -21,12 +21,10 @@ func main() {
 	db.AutoMigrate(&User{}, &Plan{})
 
 	wg := sync.WaitGroup{}
-
 	app := Bridge{
 		DB:        db,
 		WaitGroup: &wg,
 	}
-
 	go app.ListenForShutdown()
 
 	mux := http.NewServeMux()
@@ -36,6 +34,8 @@ func main() {
 	mux.HandleFunc("/activate", app.Activate)
 	mux.HandleFunc("/login", app.Login)
 	mux.HandleFunc("/logout", app.Logout)
+
+	mux.HandleFunc("POST /login", app.PostLogin)
 
 	server := &http.Server{
 		Addr:    ":1000",
