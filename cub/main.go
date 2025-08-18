@@ -29,8 +29,10 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", app.Home)
-	mux.HandleFunc("/", app.Register)
-	mux.HandleFunc("/", app.Login)
+	mux.HandleFunc("/register", app.Register)
+	mux.HandleFunc("/activate", app.Activate)
+	mux.HandleFunc("/login", app.Login)
+	mux.HandleFunc("/logout", app.Logout)
 
 	server := &http.Server{
 		Addr:    ":1000",
