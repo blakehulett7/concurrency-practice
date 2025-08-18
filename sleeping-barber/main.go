@@ -41,14 +41,21 @@ func main() {
 		shop_is_closed <- true
 	}()
 
+	i := 1
 	go func() {
 		for {
-			//dice_roll := rand.Int() % (2 * arrival_rate)
-			select {}
+			dice_roll := time.Duration(rand.Int() % (2 * arrival_rate))
+			select {
+			case <-shop_is_closing_channel:
+				return
+			case <-time.After(time.Millisecond * dice_roll):
+				shop.AddClient(fmt.Sprintf("Client %d", i))
+				i++
+			}
 		}
 	}()
 
-	time.Sleep(5 * time.Second)
+	<-shop_is_closed
 }
 
 type Barber struct {

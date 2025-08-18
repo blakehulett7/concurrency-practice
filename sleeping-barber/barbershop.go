@@ -46,6 +46,22 @@ func (shop *BarberShop) AddBarber(name string) {
 	}()
 }
 
+func (shop *BarberShop) AddClient(client string) {
+	ColorPrint(Green, fmt.Sprintf("*** %s has arrived!", client))
+
+	if !shop.IsOpen {
+		ColorPrint(Red, fmt.Sprintf("shop is already closed, so %s leaves", client))
+		return
+	}
+
+	select {
+	case shop.ClientsChannel <- client:
+		ColorPrint(Yellow, fmt.Sprintf("%s takes a seat in the waiting room", client))
+	default:
+		ColorPrint(Red, fmt.Sprintf("The waiting room is full, so %s leaves", client))
+	}
+}
+
 func (shop *BarberShop) CloseShop() {
 	ColorPrint(Green, "Closing shop...")
 

@@ -4,6 +4,7 @@ import "fmt"
 
 const ResetColor = "\033[0m"
 
+const Blue = "\033[34m"
 const BrightGreen = "\033[92m"
 const Cyan = "\033[36m"
 const Green = "\033[32m"
