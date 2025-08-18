@@ -26,6 +26,8 @@ func main() {
 		WaitGroup: &wg,
 	}
 
+	go app.ListenForShutdown()
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", app.Home)
