@@ -19,13 +19,13 @@ func main() {
 	barber_is_done := make(chan bool)
 	shop_is_closing := make(chan bool)
 	shop_is_closed := make(chan bool)
-	customers_channel := make(chan string, 10)
+	customers_channel := make(chan string, waiting_room_capacity)
 
-	barber_counter += 4
-	go BarberArrives("Dave", barber_is_done, customers_channel)
-	go BarberArrives("Noah", barber_is_done, customers_channel)
-	go BarberArrives("Chris", barber_is_done, customers_channel)
-	go BarberArrives("John", barber_is_done, customers_channel)
+	barbers := []string{"Dave", "Noah", "Chris", "John"}
+	for _, barber := range barbers {
+		barber_counter++
+		go BarberSystem(barber, barber_is_done, customers_channel)
+	}
 	go CustomerSystem(customers_channel, shop_is_closing)
 	go func() {
 		<-time.After(shop_day_length)
@@ -41,7 +41,7 @@ func main() {
 	ColorPrint(Cyan, "Dominus Iesus Christus")
 }
 
-func BarberArrives(name string, barber_is_done chan bool, customer_channel chan string) {
+func BarberSystem(name string, barber_is_done chan bool, customer_channel chan string) {
 	is_asleep := false
 
 	for {
