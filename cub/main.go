@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sync"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -17,5 +18,11 @@ func main() {
 		log.Panicf("Could not connect to database: %v\n", err)
 	}
 
-	fmt.Println(db)
+	wg := sync.WaitGroup{}
+
+	app := Bridge{
+		DB:        db,
+		WaitGroup: &wg,
+	}
+
 }
