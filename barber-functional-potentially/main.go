@@ -21,13 +21,10 @@ func main() {
 	shop_is_closed := make(chan bool)
 	customers_channel := make(chan string, 10)
 
-	barber_counter++
+	barber_counter += 4
 	go BarberArrives("Dave", barber_is_done, customers_channel)
-	barber_counter++
 	go BarberArrives("Noah", barber_is_done, customers_channel)
-	barber_counter++
 	go BarberArrives("Chris", barber_is_done, customers_channel)
-	barber_counter++
 	go BarberArrives("John", barber_is_done, customers_channel)
 	go CustomerSystem(customers_channel, shop_is_closing)
 	go func() {
