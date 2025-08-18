@@ -11,3 +11,7 @@ func (app *Bridge) Register(w http.ResponseWriter, r *http.Request) {
 	}
 	Render(w, "register.html", data)
 }
+
+func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
+
+}

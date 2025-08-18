@@ -36,6 +36,7 @@ func main() {
 	mux.HandleFunc("/logout", app.Logout)
 
 	mux.HandleFunc("POST /login", app.PostLogin)
+	mux.HandleFunc("POST /register", app.PostRegister)
 
 	server := &http.Server{
 		Addr:    ":1000",
