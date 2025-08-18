@@ -23,6 +23,12 @@ func main() {
 
 	barber_counter++
 	go BarberArrives("Dave", barber_is_done, customers_channel)
+	barber_counter++
+	go BarberArrives("Noah", barber_is_done, customers_channel)
+	barber_counter++
+	go BarberArrives("Chris", barber_is_done, customers_channel)
+	barber_counter++
+	go BarberArrives("John", barber_is_done, customers_channel)
 	go CustomerSystem(customers_channel, shop_is_closing)
 	go func() {
 		<-time.After(shop_day_length)
