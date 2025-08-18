@@ -18,6 +18,7 @@ func main() {
 	if err != nil {
 		log.Panicf("Could not connect to database: %v\n", err)
 	}
+	db.AutoMigrate(&User{}, &Plan{})
 
 	wg := sync.WaitGroup{}
 
