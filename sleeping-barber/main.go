@@ -30,6 +30,10 @@ func main() {
 
 	ColorPrint(Green, "Shop is open...")
 	shop.AddBarber("Dave")
+	shop.AddBarber("Noah")
+	shop.AddBarber("Shana")
+	shop.AddBarber("Donny")
+	shop.AddBarber("Milton")
 
 	shop_is_closing_channel := make(chan bool)
 	shop_is_closed := make(chan bool)
