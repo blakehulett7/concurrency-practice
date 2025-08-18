@@ -2,7 +2,7 @@ package main
 
 import "time"
 
-type UemplateData struct {
+type TemplateData struct {
 	StringMap     map[string]string
 	IntMap        map[string]int
 	FloatMap      map[string]float64
@@ -10,6 +10,6 @@ type UemplateData struct {
 	Flash         string
 	Warning       string
 	Error         string
-	Authenticated int
+	Authenticated bool
 	Now           time.Time
 }
