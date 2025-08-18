@@ -15,22 +15,18 @@ func main() {
 	ColorPrint(Cyan, "----------------------")
 	fmt.Println()
 
-	barber_counter := 0
+	barbers := []string{"Dave", "Noah", "Chris", "John"}
 	barber_is_done := make(chan bool)
 	shop_is_closing := make(chan bool)
 	shop_is_closed := make(chan bool)
 	customers_channel := make(chan string, waiting_room_capacity)
 
-	barbers := []string{"Dave", "Noah", "Chris", "John"}
-	for _, barber := range barbers {
-		barber_counter++
-		go BarberSystem(barber, barber_is_done, customers_channel)
-	}
+	go StartBarberSystem(barbers, barber_is_done, customers_channel)
 	go CustomerSystem(customers_channel, shop_is_closing)
 	go func() {
 		<-time.After(shop_day_length)
 		shop_is_closing <- true
-		CloseShop(barber_counter, barber_is_done, customers_channel)
+		CloseShop(len(barbers), barber_is_done, customers_channel)
 		shop_is_closed <- true
 	}()
 
@@ -103,5 +99,11 @@ func CustomerSystem(customer_channel chan string, shop_is_closing chan bool) {
 				ColorPrint(Red, fmt.Sprintf("No seats available, %s has left", customer_name))
 			}
 		}
+	}
+}
+
+func StartBarberSystem(barbers []string, barber_is_done chan bool, customer_channel chan string) {
+	for _, barber := range barbers {
+		go BarberSystem(barber, barber_is_done, customer_channel)
 	}
 }
