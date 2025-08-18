@@ -15,41 +15,38 @@ func main() {
 	ColorPrint(Cyan, "----------------------")
 	fmt.Println()
 
-	barbers := []string{"Dave", "Noah", "Chris", "John"}
-	barber_is_done := make(chan bool)
-	shop_is_closing := make(chan bool)
-	shop_is_closed := make(chan bool)
-	customers_channel := make(chan string, waiting_room_capacity)
+	shop := BarberShop{
+		Barbers:         []string{"Dave", "Noah", "Chris", "John"},
+		BarberIsDone:    make(chan bool),
+		CustomerChannel: make(chan string, waiting_room_capacity),
+		IsClosing:       make(chan bool),
+		IsClosed:        make(chan bool),
+	}
 
-	go StartBarberSystem(barbers, barber_is_done, customers_channel)
-	go CustomerSystem(customers_channel, shop_is_closing)
-	go func() {
-		<-time.After(shop_day_length)
-		shop_is_closing <- true
-		CloseShop(len(barbers), barber_is_done, customers_channel)
-		shop_is_closed <- true
-	}()
+	go StartBarberSystem(shop)
+	go CustomerSystem(shop)
+	go OpenShop(shop)
 
-	<-shop_is_closed
+	<-shop.IsClosed
 
 	fmt.Println()
 	ColorPrint(Cyan, "----------------------")
 	ColorPrint(Cyan, "Dominus Iesus Christus")
 }
 
-func BarberSystem(name string, barber_is_done chan bool, customer_channel chan string) {
+func BarberSystem(name string, shop BarberShop) {
 	is_asleep := false
 
 	for {
-		if len(customer_channel) == 0 {
+		if len(shop.CustomerChannel) == 0 {
 			is_asleep = true
 			ColorPrint(Yellow, fmt.Sprintf("No customers, barber %s takes a nap", name))
 		}
 
-		customer, shop_is_open := <-customer_channel
+		customer, shop_is_open := <-shop.CustomerChannel
 		if !shop_is_open {
 			ColorPrint(Green, fmt.Sprintf("No more customers, barber %s is going home", name))
-			barber_is_done <- true
+			shop.BarberIsDone <- true
 			return
 		}
 
@@ -67,33 +64,35 @@ func BarberSystem(name string, barber_is_done chan bool, customer_channel chan s
 	}
 }
 
-func CloseShop(barber_counter int, barber_is_done chan bool, customer_channel chan string) {
-	close(customer_channel)
+func CloseShop(shop BarberShop) {
+	close(shop.CustomerChannel)
+
+	barber_counter := len(shop.Barbers)
 	for {
 		if barber_counter == 0 {
 			return
 		}
 
-		<-barber_is_done
+		<-shop.BarberIsDone
 		barber_counter--
 	}
 }
 
-func CustomerSystem(customer_channel chan string, shop_is_closing chan bool) {
+func CustomerSystem(shop BarberShop) {
 	i := 1
 	for {
 		dice_roll := (rand.Intn(3) + 4) * 10
 		arrival_time := time.Millisecond * time.Duration(dice_roll)
 
 		select {
-		case <-shop_is_closing:
+		case <-shop.IsClosing:
 			return
 		case <-time.After(arrival_time):
 			customer_name := fmt.Sprintf("Customer %d", i)
 			i++
 			ColorPrint(Blue, fmt.Sprintf("%s has arrived", customer_name))
 			select {
-			case customer_channel <- customer_name:
+			case shop.CustomerChannel <- customer_name:
 				ColorPrint(Blue, fmt.Sprintf("%s takes a seat", customer_name))
 			default:
 				ColorPrint(Red, fmt.Sprintf("No seats available, %s has left", customer_name))
@@ -102,8 +101,15 @@ func CustomerSystem(customer_channel chan string, shop_is_closing chan bool) {
 	}
 }
 
-func StartBarberSystem(barbers []string, barber_is_done chan bool, customer_channel chan string) {
-	for _, barber := range barbers {
-		go BarberSystem(barber, barber_is_done, customer_channel)
+func OpenShop(shop BarberShop) {
+	<-time.After(shop_day_length)
+	shop.IsClosing <- true
+	CloseShop(shop)
+	shop.IsClosed <- true
+}
+
+func StartBarberSystem(shop BarberShop) {
+	for _, barber := range shop.Barbers {
+		go BarberSystem(barber, shop)
 	}
 }
