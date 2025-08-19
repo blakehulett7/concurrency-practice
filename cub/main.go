@@ -36,7 +36,7 @@ func main() {
 
 	mux.HandleFunc("/", app.Home)
 	mux.HandleFunc("/register", app.Register)
-	mux.HandleFunc("/activate", app.Activate)
+	mux.HandleFunc("/activate/{hash}", app.Activate)
 	mux.HandleFunc("/login", app.Login)
 	mux.HandleFunc("/logout", app.Logout)
 

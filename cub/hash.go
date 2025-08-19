@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 )
 
-var HashSecret = "9cf1f2dc6771a8beab32eefc32f50d057236d27ff3f9dcb33caf7a5aaab57132"
+const HashSecret = "9cf1f2dc6771a8beab32eefc32f50d057236d27ff3f9dcb33caf7a5aaab57132"
 
 func GetGcm() cipher.AEAD {
 	key, err := hex.DecodeString(HashSecret)
