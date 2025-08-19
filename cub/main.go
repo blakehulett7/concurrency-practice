@@ -25,7 +25,11 @@ func main() {
 		DB:        db,
 		WaitGroup: &wg,
 	}
+
+	email_error_channel := make(chan error)
+
 	go app.ListenForShutdown()
+	go ListenForEmailErrors(email_error_channel)
 
 	mux := http.NewServeMux()
 

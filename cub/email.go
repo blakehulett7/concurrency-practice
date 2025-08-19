@@ -3,15 +3,18 @@ package main
 import (
 	"fmt"
 	"net/smtp"
+	"sync"
 )
 
-func ListenForEmail() {
+func ListenForEmailErrors(email_error_channel chan error) {
 	for {
-		select {}
+		err := <-email_error_channel
+		fmt.Printf("Error sending email: %v\n", err)
 	}
 }
 
-func SendEmail(to, subject, body string, error_channel chan error) {
+func SendEmail(to, subject, body string, error_channel chan error, wg *sync.WaitGroup) {
+	defer wg.Done()
 	msg := fmt.Sprintf("From: %s\r\n", "support@dailywire.com") +
 		fmt.Sprintf("To: %s\r\n", to) +
 		fmt.Sprintf("Subject: %s\r\n", subject) +
