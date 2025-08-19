@@ -18,5 +18,6 @@ func (app *Bridge) ListenForShutdown() {
 
 func (app *Bridge) Shutdown() {
 	app.WaitGroup.Wait()
+	close(app.EmailErrChannel)
 	fmt.Println("Et Spiritus Sancti...")
 }
