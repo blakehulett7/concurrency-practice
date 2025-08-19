@@ -30,6 +30,7 @@ func (app *Bridge) PostLogin(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
+		app.SendEmail(email, "Invalid password", "An invalid login was attempted, please click this link to sign in")
 		fmt.Fprintf(w, "incorrect password")
 		return
 	}

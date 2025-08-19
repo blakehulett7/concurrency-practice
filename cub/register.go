@@ -15,6 +15,5 @@ func (app *Bridge) Register(w http.ResponseWriter, r *http.Request) {
 func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
 	// Do some stuff
 
-	app.WaitGroup.Add(1)
-	go SendEmail("to", "sub", "body", app.EmailErrChannel, app.WaitGroup)
+	app.SendEmail("to", "sub", "body")
 }

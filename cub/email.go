@@ -26,3 +26,8 @@ func SendEmail(to, subject, body string, error_channel chan error, wg *sync.Wait
 		return
 	}
 }
+
+func (app *Bridge) SendEmail(to, subject, body string) {
+	app.WaitGroup.Add(1)
+	go SendEmail(to, subject, body, app.EmailErrChannel, app.WaitGroup)
+}
