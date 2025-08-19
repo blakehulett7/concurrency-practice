@@ -26,6 +26,7 @@ func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	email := r.FormValue("email")
 	password := r.FormValue("password")
 	hashed_password, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -35,7 +36,7 @@ func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := User{
-		Email:      r.FormValue("email"),
+		Email:      email,
 		FirstName:  r.FormValue("first-name"),
 		LastName:   r.FormValue("last-name"),
 		Password:   string(hashed_password),
@@ -52,5 +53,5 @@ func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.SendEmail("to", "sub", "body")
+	app.SendEmail(email, "Activate your account", "Please click the following link to activate your account...")
 }
