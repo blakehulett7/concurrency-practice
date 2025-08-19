@@ -54,9 +54,6 @@ func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	hashed_email := HashEmail(email)
-	fmt.Printf("Original: %s\n", email)
-	fmt.Printf("Hashed: %s\n", hashed_email)
-
 	msg := fmt.Sprintf("Please click the following link to activate your account http://localhost:1000/activate?hash=%s", hashed_email)
 	app.SendEmail(email, "Activate your account", msg)
 
