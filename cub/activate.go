@@ -1,5 +1,8 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+)
 
-func (app *Bridge) Activate(w http.ResponseWriter, r *http.Request) {}
+func (app *Bridge) Activate(w http.ResponseWriter, r *http.Request) {
+}

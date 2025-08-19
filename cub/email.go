@@ -9,7 +9,9 @@ import (
 func ListenForEmailErrors(email_error_channel chan error) {
 	for {
 		err := <-email_error_channel
-		fmt.Printf("Error sending email: %v\n", err)
+		if err != nil {
+			fmt.Printf("Error sending email: %v\n", err)
+		}
 	}
 }
 

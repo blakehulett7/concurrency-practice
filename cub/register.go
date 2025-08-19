@@ -1,17 +1,12 @@
 package main
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"net/http"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
-
-var UrlSigningKey = []byte("83c71d87-36dd-4c08-866e-048e2e3cd611")
 
 func (app *Bridge) Register(w http.ResponseWriter, r *http.Request) {
 	data := TemplateData{
@@ -58,13 +53,11 @@ func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	url := fmt.Sprintf("http://localhost:1000/activate?email=%s", email)
-	signer := hmac.New(sha256.New, UrlSigningKey)
-	signer.Write([]byte(url))
-	signedUrl := signer.Sum(nil)
-	encoded := hex.EncodeToString(signedUrl)
+	hashed_email := HashEmail(email)
+	fmt.Printf("Original: %s\n", email)
+	fmt.Printf("Hashed: %s\n", hashed_email)
 
-	msg := fmt.Sprintf("Please click the following link to activate your account http://localhost:1000/activate?hash=%s", encoded)
+	msg := fmt.Sprintf("Please click the following link to activate your account http://localhost:1000/activate?hash=%s", hashed_email)
 	app.SendEmail(email, "Activate your account", msg)
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
