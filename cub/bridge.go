@@ -7,6 +7,7 @@ import (
 )
 
 type Bridge struct {
-	DB        *gorm.DB
-	WaitGroup *sync.WaitGroup
+	DB              *gorm.DB
+	WaitGroup       *sync.WaitGroup
+	EmailErrChannel chan error
 }

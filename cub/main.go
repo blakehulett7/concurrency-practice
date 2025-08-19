@@ -21,12 +21,13 @@ func main() {
 	db.AutoMigrate(&User{}, &Plan{})
 
 	wg := sync.WaitGroup{}
-	app := Bridge{
-		DB:        db,
-		WaitGroup: &wg,
-	}
-
 	email_error_channel := make(chan error)
+
+	app := Bridge{
+		DB:              db,
+		WaitGroup:       &wg,
+		EmailErrChannel: email_error_channel,
+	}
 
 	go app.ListenForShutdown()
 	go ListenForEmailErrors(email_error_channel)
