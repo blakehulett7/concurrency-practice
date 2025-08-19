@@ -60,12 +60,12 @@ func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
 
 	url := fmt.Sprintf("http://localhost:1000/activate?email=%s", email)
 	signer := hmac.New(sha256.New, UrlSigningKey)
-
 	signer.Write([]byte(url))
 	signedUrl := signer.Sum(nil)
 	encoded := hex.EncodeToString(signedUrl)
 
 	msg := fmt.Sprintf("Please click the following link to activate your account http://localhost:1000/activate?hash=%s", encoded)
-
 	app.SendEmail(email, "Activate your account", msg)
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
