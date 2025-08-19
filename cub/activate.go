@@ -27,7 +27,7 @@ func (app *Bridge) Activate(w http.ResponseWriter, r *http.Request) {
 		panic("should never get here... found user but could not update")
 	}
 
-	session_token_cookie := fmt.Sprintf("token=%dIsAuthenticated", user.Id)
+	session_token_cookie := fmt.Sprintf("token=%dIsAuthenticated; path=/", user.Id)
 	w.Header().Set("Set-Cookie", session_token_cookie)
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
