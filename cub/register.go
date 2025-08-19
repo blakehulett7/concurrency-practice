@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"hash"
 	"net/http"
 	"time"
 
@@ -44,6 +43,7 @@ func (app *Bridge) PostRegister(w http.ResponseWriter, r *http.Request) {
 		IsAdmin:    0,
 		CreatedAt:  time.Now(),
 		UpdatedAt:  time.Now(),
+		PlanId:     4,
 	}
 	result := app.DB.Create(&user)
 	if result.Error != nil {
