@@ -35,7 +35,7 @@ func (app *Bridge) PostLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session_token_cookie := fmt.Sprintf("token=%dIsAuthenticated", user.Id)
+	session_token_cookie := fmt.Sprintf("token=%d", user.Id)
 	w.Header().Set("Set-Cookie", session_token_cookie)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
