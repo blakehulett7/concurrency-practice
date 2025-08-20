@@ -63,4 +63,6 @@ func (app *Bridge) SubscribeUser(w http.ResponseWriter, r *http.Request) {
 
 	user.PlanId = plan_id
 	app.DB.Save(user)
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
