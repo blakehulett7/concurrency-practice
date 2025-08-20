@@ -39,6 +39,7 @@ func main() {
 	mux.HandleFunc("/activate/{hash}", app.Activate)
 	mux.HandleFunc("/login", app.Login)
 	mux.HandleFunc("/logout", app.Logout)
+	mux.HandleFunc("/subscribe", app.ChooseSubscription)
 
 	mux.HandleFunc("POST /register", app.PostRegister)
 	mux.HandleFunc("POST /login", app.PostLogin)

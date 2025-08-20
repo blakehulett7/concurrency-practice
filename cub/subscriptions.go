@@ -19,13 +19,14 @@ func (app *Bridge) ChooseSubscription(w http.ResponseWriter, r *http.Request) {
 	if res.Error != nil {
 		panic("could not get plans")
 	}
+	PrettyPrint("PLANS", plans)
 
 	data := TemplateData{
 		Flash:         "",
 		Warning:       "",
 		Error:         "",
 		Authenticated: is_authenticated,
-		Data:          map[string]any{"plans": plans},
+		Data:          map[string]any{"plans": plans[:len(plans)-1]},
 	}
 	Render(w, "plans.html", data)
 }
